@@ -56,7 +56,8 @@ _CONVERSATION_SNAPSHOT_JS = r"""
         'button[data-testid*="copy-turn" i]',
         'button[aria-label="Copy message" i]',
         '[role="button"][aria-label="Copy response" i]',
-        '[role="button"][aria-label="Copy message" i]'
+        '[role="button"][aria-label="Copy message" i]',
+        'button[aria-label="Copy"]'
     ];
     const copySelector = copySelectors.join(",");
 
@@ -343,7 +344,8 @@ _CLICK_LATEST_COPY_BUTTON_JS = r"""
         'button[data-testid*="copy-turn" i]',
         'button[aria-label="Copy message" i]',
         '[role="button"][aria-label="Copy response" i]',
-        '[role="button"][aria-label="Copy message" i]'
+        '[role="button"][aria-label="Copy message" i]',
+        'button[aria-label="Copy"]'
     ];
     const hasGeneratedImage = (root) => {
         if (!root) return false;
