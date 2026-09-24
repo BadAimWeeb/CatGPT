@@ -58,24 +58,25 @@ async def human_type(page: Page, selector: str, text: str) -> None:
 
     log.debug(f"Inserting {len(text)} chars into {selector}")
 
-    # Strategy 1: execCommand — fires beforeinput + input events
-    try:
-        result = await page.evaluate(
-            """([selector, text]) => {
-                const el = document.querySelector(selector);
-                if (!el) return 'no-element';
-                el.focus();
-                const ok = document.execCommand('insertText', false, text);
-                return ok ? 'ok' : 'failed';
-            }""",
-            [selector, text],
-        )
-        if result == "ok":
-            log.debug("Insert via execCommand succeeded")
-            return
-        log.debug(f"execCommand result: {result}")
-    except Exception as e:
-        log.debug(f"execCommand failed: {e}")
+    # Strategy 1: execCommand — fires beforeinput + input events. Only use when less than 160 characters to prevent lag.
+    if len(text) <= 160:
+        try:
+            result = await page.evaluate(
+                """([selector, text]) => {
+                    const el = document.querySelector(selector);
+                    if (!el) return 'no-element';
+                    el.focus();
+                    const ok = document.execCommand('insertText', false, text);
+                    return ok ? 'ok' : 'failed';
+                }""",
+                [selector, text],
+            )
+            if result == "ok":
+                log.debug("Insert via execCommand succeeded")
+                return
+            log.debug(f"execCommand result: {result}")
+        except Exception as e:
+            log.debug(f"execCommand failed: {e}")
 
     # Strategy 2: Clipboard paste event
     try:
